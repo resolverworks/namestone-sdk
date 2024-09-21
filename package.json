@@ -1,0 +1,8 @@
+{
+  "name": "namestone-sdk",
+  "version": "0.1.0",
+  "description": "A type-safe wrapper for the NameStone.xyz API",
+  "main": "index.ts",
+  "author": "Nick Brodeur <106794061+ncale@users.noreply.github.com>",
+  "license": "MIT"
+}
