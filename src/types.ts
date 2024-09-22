@@ -1,17 +1,24 @@
-type NameStoneResponse = NameStoneUser[];
+type TextRecords = {
+  [key: string]: string;
+};
 
-type NameStoneUser = {
+type CoinTypes = {
+  [key: string]: string;
+};
+
+type NameData = {
   name: string;
   address: string;
   domain: string;
-  text_records: NameStoneTextRecords;
+  text_records?: TextRecords;
+  coin_types?: CoinTypes;
 };
 
-type NameStoneTextRecords =
-  | Record<string, string>
-  | {
-      avatar?: string;
-      description?: string;
-    };
+type DomainData = {
+  domain: string;
+  address: string;
+  text_records?: TextRecords;
+  coin_types?: CoinTypes;
+};
 
-export { NameStoneResponse, NameStoneUser, NameStoneTextRecords };
+export { TextRecords, CoinTypes, NameData, DomainData };
