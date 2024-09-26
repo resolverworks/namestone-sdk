@@ -21,4 +21,4 @@ type DomainData = {
   coin_types?: CoinTypes;
 };
 
-export { TextRecords, CoinTypes, NameData, DomainData };
+export type { TextRecords, CoinTypes, NameData, DomainData };
