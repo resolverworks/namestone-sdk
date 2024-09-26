@@ -5,6 +5,10 @@ export class NameStone {
   private baseUrl = "https://namestone.xyz/api/public_v1";
   private headers: HeadersInit;
 
+  /**
+   * Creates a NameStone instance.
+   * @param apiKey - NameStone API key for authentication.
+   */
   constructor(apiKey: string) {
     this.headers = new Headers({
       "Content-Type": "application/json",
@@ -32,6 +36,18 @@ export class NameStone {
     return res.json();
   }
 
+  /**
+   * Sets a name with associated data.
+   * @param name - The name to set.
+   * @param domain - The domain for the name.
+   * @param address - The address associated with the name.
+   * @param contenthash - Optional content hash.
+   * @param text_records - Optional text records.
+   * @param coin_types - Optional coin types.
+   * @returns A promise that resolves when the name is set.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async setName(
     name: string,
     domain: string,
@@ -51,6 +67,18 @@ export class NameStone {
     await this.request("/set-name", "POST", data);
   }
 
+  /**
+   * Claims a name with associated data.
+   * @param name - The name to claim.
+   * @param domain - The domain for the name.
+   * @param address - The address associated with the name.
+   * @param contenthash - Optional content hash.
+   * @param text_records - Optional text records.
+   * @param single_claim - Optional flag for single claim.
+   * @returns A promise that resolves when the name is claimed.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async claimName(
     name: string,
     domain: string,
@@ -64,6 +92,17 @@ export class NameStone {
     await this.request(endpoint, "POST", data);
   }
 
+  /**
+   * Retrieves names based on specified criteria.
+   * @param domain - Optional domain to filter names.
+   * @param address - Optional address to filter names.
+   * @param text_records - Optional flag to include text records.
+   * @param limit - Optional limit for the number of results.
+   * @param offset - Optional offset for pagination.
+   * @returns A promise that resolves to an array of NameData.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async getNames(
     domain?: string,
     address?: string,
@@ -82,6 +121,18 @@ export class NameStone {
     return this.request<NameData[]>(endpoint, "GET");
   }
 
+  /**
+   * Searches for names based on specified criteria.
+   * @param domain - The domain to search in.
+   * @param name - The name to search for.
+   * @param text_records - Optional flag to include text records.
+   * @param limit - Optional limit for the number of results.
+   * @param exact_match - Optional flag for exact matching.
+   * @param offset - Optional offset for pagination.
+   * @returns A promise that resolves to an array of NameData.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async searchNames(
     domain: string,
     name: string,
@@ -100,6 +151,16 @@ export class NameStone {
     return this.request<NameData[]>(endpoint, "GET");
   }
 
+  /**
+   * Searches for a single name with exact matching.
+   * @param domain - The domain to search in.
+   * @param name - The name to search for.
+   * @param text_records - Optional flag to include text records.
+   * @returns A promise that resolves to a single NameData object.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   * @throws {MissingDataError} If no matching name is found.
+   */
   async searchName(domain: string, name: string, text_records?: boolean): Promise<NameData> {
     const params = new URLSearchParams({ domain, name, limit: "1", exact_match: "1" });
     if (text_records !== undefined) params.append("text_records", text_records ? "1" : "0");
@@ -113,11 +174,29 @@ export class NameStone {
     return data[0];
   }
 
+  /**
+   * Deletes a name from the specified domain.
+   * @param name - The name to delete.
+   * @param domain - The domain from which to delete the name.
+   * @returns A promise that resolves when the name is deleted.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async deleteName(name: string, domain: string): Promise<void> {
     const data = { name, domain };
     await this.request("/delete-name", "POST", data);
   }
 
+  /**
+   * Sets domain data.
+   * @param domain - The domain to set.
+   * @param address - The address associated with the domain.
+   * @param contenthash - Optional content hash.
+   * @param text_records - Optional text records.
+   * @returns A promise that resolves when the domain is set.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async setDomain(
     domain: string,
     address: string,
@@ -128,6 +207,13 @@ export class NameStone {
     await this.request("/set-domain", "POST", data);
   }
 
+  /**
+   * Retrieves domain data.
+   * @param domain - Optional domain to retrieve data for.
+   * @returns A promise that resolves to an array of DomainData.
+   * @throws {AuthenticationError} If authentication fails.
+   * @throws {NetworkError} If there's a network error.
+   */
   async getDomain(domain?: string): Promise<DomainData[]> {
     const params = new URLSearchParams();
     if (domain) params.append("domain", domain);
