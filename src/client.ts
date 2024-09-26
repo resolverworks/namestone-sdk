@@ -12,11 +12,7 @@ export class NameStone {
     });
   }
 
-  private async request<T>(
-    endpoint: string,
-    method: string,
-    data?: any
-  ): Promise<T> {
+  private async request<T>(endpoint: string, method: string, data?: any): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
     const config: RequestInit = {
       method,
@@ -42,7 +38,7 @@ export class NameStone {
     address: string,
     contenthash?: string,
     text_records?: TextRecords,
-    coin_types?: CoinTypes
+    coin_types?: CoinTypes,
   ): Promise<void> {
     const data = {
       name,
@@ -61,7 +57,7 @@ export class NameStone {
     address: string,
     contenthash?: string,
     text_records?: TextRecords,
-    single_claim?: boolean
+    single_claim?: boolean,
   ): Promise<void> {
     const data = { name, domain, address, contenthash, text_records };
     const endpoint = `/claim-name${single_claim ? "?single_claim=1" : ""}`;
@@ -73,13 +69,12 @@ export class NameStone {
     address?: string,
     text_records?: boolean,
     limit?: number,
-    offset?: number
+    offset?: number,
   ): Promise<NameData[]> {
     const params = new URLSearchParams();
     if (domain) params.append("domain", domain);
     if (address) params.append("address", address);
-    if (text_records !== undefined)
-      params.append("text_records", text_records ? "1" : "0");
+    if (text_records !== undefined) params.append("text_records", text_records ? "1" : "0");
     if (limit !== undefined) params.append("limit", limit.toString());
     if (offset !== undefined) params.append("offset", offset.toString());
 
@@ -93,14 +88,12 @@ export class NameStone {
     text_records?: boolean,
     limit?: number,
     exact_match?: boolean,
-    offset?: number
+    offset?: number,
   ): Promise<NameData[]> {
     const params = new URLSearchParams({ domain, name });
-    if (text_records !== undefined)
-      params.append("text_records", text_records ? "1" : "0");
+    if (text_records !== undefined) params.append("text_records", text_records ? "1" : "0");
     if (limit !== undefined) params.append("limit", limit.toString());
-    if (exact_match !== undefined)
-      params.append("exact_match", exact_match ? "1" : "0");
+    if (exact_match !== undefined) params.append("exact_match", exact_match ? "1" : "0");
     if (offset !== undefined) params.append("offset", offset.toString());
 
     const endpoint = `/search-names?${params.toString()}`;
@@ -116,7 +109,7 @@ export class NameStone {
     domain: string,
     address: string,
     contenthash?: string,
-    text_records?: TextRecords
+    text_records?: TextRecords,
   ): Promise<void> {
     const data = { domain, address, contenthash, text_records };
     await this.request("/set-domain", "POST", data);
