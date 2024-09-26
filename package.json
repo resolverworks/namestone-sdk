@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "repository": {
-    "url": "https://github.com/ncale/namestone-sdk"
+    "url": "git+https://github.com/ncale/namestone-sdk.git"
   },
   "scripts": {
     "build": "tsup"
