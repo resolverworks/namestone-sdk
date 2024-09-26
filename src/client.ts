@@ -100,6 +100,19 @@ export class NameStone {
     return this.request<NameData[]>(endpoint, "GET");
   }
 
+  async searchName(domain: string, name: string, text_records?: boolean): Promise<NameData> {
+    const params = new URLSearchParams({ domain, name, limit: "1", exact_match: "1" });
+    if (text_records !== undefined) params.append("text_records", text_records ? "1" : "0");
+
+    const endpoint = `/search-names?${params.toString()}`;
+    const data = await this.request<NameData[]>(endpoint, "GET");
+
+    if (data.length === 0) {
+      throw new MissingDataError(`No user found matching name: ${name}`);
+    }
+    return data[0];
+  }
+
   async deleteName(name: string, domain: string): Promise<void> {
     const data = { name, domain };
     await this.request("/delete-name", "POST", data);
