@@ -12,7 +12,7 @@ import NameStone from "namestone-sdk";
 const ns = new NameStone(<YOUR_API_KEY_HERE>);
 ```
 
-Then call with the relevant methods.
+Then call with the relevant methods. Wrap all params in an object
 
 ```typescript
 async function getData() {
@@ -95,23 +95,6 @@ Searches for names based on specified criteria. Maps to the NameStone '/search-n
 **Throws**: 
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
-
-<br>
-
-### `searchName`
-
-Searches for a single name with exact matching. Maps to the NameStone '/search-names' route.
-
-- `domain`: The domain to search in.
-- `name`: The name to search for.
-- `text_records`: Optional flag to include text records.
-
-**Returns**: A promise that resolves to a single NameData object.
-
-**Throws**: 
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
-- `MissingDataError`: If no matching name is found.
 
 <br>
 
