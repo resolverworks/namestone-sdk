@@ -177,5 +177,4 @@ class NameStone {
     return this.request<DomainData[]>(endpoint, "GET");
   }
 }
-export { AuthenticationError, MissingDataError, NetworkError };
-export default NameStone;
+export = NameStone;

@@ -1,10 +1,11 @@
 {
   "name": "namestone-sdk",
-  "version": "0.2.1",
+  "version": "0.2.6",
   "description": "A type-safe wrapper for the NameStone.xyz API",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "repository": {
     "url": "git+https://github.com/ncale/namestone-sdk.git"
   },
@@ -19,6 +20,7 @@
   "devDependencies": {
     "prettier": "^3.3.3",
     "tsup": "^8.3.0",
+    "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }
 }
