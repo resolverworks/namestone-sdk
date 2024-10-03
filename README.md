@@ -16,9 +16,12 @@ Then call with the relevant methods. Wrap all params in an object
 
 ```typescript
 async function getData() {
-  const data = await ns.getNames();
+  const domain = "testbrand.eth";
+  const data = await ns.getNames({ domain: domain });
   console.log(data);
 }
+
+getData();
 ```
 
 ## Documentation
@@ -36,7 +39,8 @@ Sets a name with associated data. Maps to the NameStone '/set-name' route.
 
 **Returns**: A promise that resolves when the name is set.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
@@ -55,7 +59,8 @@ Claims a name with associated data. Maps to the NameStone '/claim-name' route.
 
 **Returns**: A promise that resolves when the name is claimed.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
@@ -73,7 +78,8 @@ Retrieves names based on specified criteria. Maps to the NameStone '/get-names' 
 
 **Returns**: A promise that resolves to an array of NameData.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
@@ -92,7 +98,8 @@ Searches for names based on specified criteria. Maps to the NameStone '/search-n
 
 **Returns**: A promise that resolves to an array of NameData.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
@@ -107,7 +114,8 @@ Deletes a name from the specified domain. Maps to the NameStone '/delete-name' r
 
 **Returns**: A promise that resolves when the name is deleted.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
@@ -124,7 +132,8 @@ Sets domain data. Maps to the NameStone '/set-domain' route.
 
 **Returns**: A promise that resolves when the domain is set.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
@@ -138,7 +147,8 @@ Retrieves domain data. Maps to the NameStone '/get-domain' route.
 
 **Returns**: A promise that resolves to an array of DomainData.
 
-**Throws**: 
+**Throws**:
+
 - `AuthenticationError`: If authentication fails.
 - `NetworkError`: If there's a network error.
 
