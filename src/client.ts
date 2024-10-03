@@ -35,7 +35,6 @@ interface SearchNamesParams {
   offset?: number;
 }
 
-
 interface DeleteNameParams {
   name: string;
   domain: string;
@@ -48,7 +47,7 @@ interface SetDomainParams {
   text_records?: TextRecords;
 }
 
-export class NameStone {
+class NameStone {
   private baseUrl = "https://namestone.xyz/api/public_v1";
   private headers: HeadersInit;
 
@@ -178,5 +177,5 @@ export class NameStone {
     return this.request<DomainData[]>(endpoint, "GET");
   }
 }
-
+export { AuthenticationError, MissingDataError, NetworkError };
 export default NameStone;
