@@ -16,6 +16,7 @@ interface ClaimNameParams {
   address: string;
   contenthash?: string;
   text_records?: TextRecords;
+  coin_types?: CoinTypes;
 }
 
 interface GetNamesParams {
@@ -46,6 +47,9 @@ interface SetDomainParams {
   contenthash?: string;
   text_records?: TextRecords;
 }
+interface GetDomainParams {
+  domain: string;
+}
 
 class NameStone {
   private baseUrl = "https://namestone.xyz/api/public_v1";
@@ -73,10 +77,11 @@ class NameStone {
     const res = await fetch(url, config);
 
     if (!res.ok) {
+      const errorMessage = await res.text();
       if (res.status === 401) {
-        throw new AuthenticationError("Authentication failed");
+        throw new AuthenticationError(`Authentication failed: ${errorMessage}`);
       }
-      throw new NetworkError(`HTTP error! status: ${res.status}`);
+      throw new NetworkError(`HTTP error! status: ${res.status}, message: ${errorMessage}`);
     }
 
     return res.json();
@@ -90,7 +95,7 @@ class NameStone {
    * @throws {NetworkError} If there's a network error.
    */
   async setName(params: SetNameParams): Promise<void> {
-    await this.request("/set-name", "POST", params);
+    return await this.request("/set-name", "POST", params);
   }
 
   /**
@@ -101,7 +106,7 @@ class NameStone {
    * @throws {NetworkError} If there's a network error.
    */
   async claimName(params: ClaimNameParams): Promise<void> {
-    await this.request("/claim-name", "POST", params);
+    return await this.request("/claim-name", "POST", params);
   }
 
   /**
@@ -148,7 +153,7 @@ class NameStone {
    * @throws {NetworkError} If there's a network error.
    */
   async deleteName(params: DeleteNameParams): Promise<void> {
-    await this.request("/delete-name", "POST", params);
+    return await this.request("/delete-name", "POST", params);
   }
 
   /**
@@ -159,7 +164,7 @@ class NameStone {
    * @throws {NetworkError} If there's a network error.
    */
   async setDomain(params: SetDomainParams): Promise<void> {
-    await this.request("/set-domain", "POST", params);
+    return await this.request("/set-domain", "POST", params);
   }
 
   /**
@@ -169,11 +174,14 @@ class NameStone {
    * @throws {AuthenticationError} If authentication fails.
    * @throws {NetworkError} If there's a network error.
    */
-  async getDomain(domain?: string): Promise<DomainData[]> {
-    const params = new URLSearchParams();
-    if (domain) params.append("domain", domain);
-
-    const endpoint = `/get-domain?${params.toString()}`;
+  async getDomain(params: GetDomainParams): Promise<DomainData[]> {
+    const queryParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined) {
+        queryParams.append(key, value.toString());
+      }
+    }
+    const endpoint = `/get-domain?${queryParams.toString()}`;
     return this.request<DomainData[]>(endpoint, "GET");
   }
 }
