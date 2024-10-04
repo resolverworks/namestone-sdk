@@ -17,6 +17,7 @@ interface ClaimNameParams {
   contenthash?: string;
   text_records?: TextRecords;
   coin_types?: CoinTypes;
+  single_claim?: number;
 }
 
 interface GetNamesParams {
@@ -106,7 +107,11 @@ class NameStone {
    * @throws {NetworkError} If there's a network error.
    */
   async claimName(params: ClaimNameParams): Promise<void> {
-    return await this.request("/claim-name", "POST", params);
+    const single_claim = params.single_claim || 0;
+    const queryParams = new URLSearchParams();
+    queryParams.append("single_claim", single_claim.toString());
+    const endpoint = `/claim-name?${queryParams}`;
+    return await this.request(endpoint, "POST", params);
   }
 
   /**
