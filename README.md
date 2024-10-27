@@ -1,18 +1,24 @@
 # NameStone SDK
 
-Unofficial type-safe SDK for the namestone.xyz ENS subdomain API. See the official NameStone docs [here](https://namestone.xyz/docs/claim-name).
+Type-safe SDK for the namestone.xyz ENS subdomain API. See the official NameStone docs [here](https://namestone.xyz/docs/claim-name).
 
-## Get Started
+## Getting Started
 
-Initialize your NameStone client.
+Install from npm.
+
+```shell
+npm install namestone-sdk
+```
+
+Initialize a NameStone client with your api key.
 
 ```typescript
 import NameStone from "namestone-sdk";
 
-const ns = new NameStone(<YOUR_API_KEY_HERE>);
+const ns = new NameStone("NAMESTONE_API_KEY");
 ```
 
-Then call with the relevant methods. Wrap all params in an object
+Then call with the relevant methods. Wrap all params in an object.
 
 ```typescript
 async function getData() {
@@ -154,6 +160,16 @@ Retrieves domain data. Maps to the NameStone '/get-domain' route.
 
 <br>
 
-## Worklog
+## Contributing
 
-- [ ] Improved error handling
+Instructions for potential contributors:
+
+1. Fork the repository
+2. Create your feature branch (git checkout -b feature/amazing-feature)
+3. Commit your changes (git commit -m 'Add some amazing feature')
+4. Push to the branch (git push origin feature/amazing-feature)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
