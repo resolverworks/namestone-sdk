@@ -1,10 +1,10 @@
 # NameStone SDK
 
-Unofficial type-safe SDK for the namestone.xyz ENS subdomain API. See the official NameStone docs [here](https://namestone.xyz/docs/claim-name).
+Unofficial type-safe SDK for the namestone.xyz ENS subdomain API. See the official NameStone docs [here](https://namestone.xyz/docs/).
 
 ## Get Started
 
-Initialize your NameStone client.
+Initialize your NameStone client. API key is not required for getSiweMessage or enableDomain.
 
 ```typescript
 import NameStone from "namestone-sdk";
@@ -38,26 +38,6 @@ Sets a name with associated data. Maps to the NameStone '/set-name' route.
 - `coin_types`: Optional coin types.
 
 **Returns**: A promise that resolves when the name is set.
-
-**Throws**:
-
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
-
-<br>
-
-### `claimName`
-
-Claims a name with associated data. Maps to the NameStone '/claim-name' route.
-
-- `name`: The name to claim.
-- `domain`: The domain for the name.
-- `address`: The address associated with the name.
-- `contenthash`: Optional content hash.
-- `text_records`: Optional text records.
-- `single_claim`: Optional flag for single claim.
-
-**Returns**: A promise that resolves when the name is claimed.
 
 **Throws**:
 
@@ -153,6 +133,34 @@ Retrieves domain data. Maps to the NameStone '/get-domain' route.
 - `NetworkError`: If there's a network error.
 
 <br>
+
+### `getSiweMessage`
+
+Retrieves a SIWE (Sign-In with Ethereum) message for authentication. Maps to the NameStone '/get-siwe-message' route. Does not require an API key.
+
+- `address`: Your Ethereum address. This address should own the domain you plan to use with NameStone.
+- `domain`: Optional domain sending the SIWE message. Defaults to namestone.xyz.
+- `uri`: Optional URI sending the SIWE message. Defaults to "https://namestone.xyz/api/public_v1/get-siwe-message"
+  **Returns**: A promise that resolves to a SIWE message string.
+  **Throws**:
+- `NetworkError`: If there's a network error.
+  <br>
+
+### `enableDomain`
+
+Programmatically enables new domains for NameStone. Maps to the NameStone '/enable-domain' route. Requires a signed SIWE message. Does not require an API key.
+
+- `company_name`: The name of your company.
+- `email`: Your email to send the api key to.
+- `address`: The Ethereum address that owns the domain.
+- `domain`: The domain (e.g. "testbrand.eth").
+- `signature`: The message from get-siwe-message, signed with your Ethereum address.
+- `api_key`: Optional. To use an existing NameStone API key that your wallet has access to.
+- `cycle_key`: Optional. If "1" and the api key already exists, the key will be cycled.
+  **Returns**: A promise that resolves to an object containing the new API key.
+  **Throws**:
+- NetworkError: If there's a network error.
+  <br>
 
 ## Worklog
 
