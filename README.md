@@ -1,167 +1,151 @@
 # NameStone SDK
 
-Unofficial type-safe SDK for the namestone.xyz ENS subdomain API. See the official NameStone docs [here](https://namestone.xyz/docs/).
+Type-safe SDK for interacting with the [NameStone](https://namestone.xyz/docs/) ENS subdomain API.
 
-## Get Started
+## Installation
 
-Initialize your NameStone client. API key is not required for getSiweMessage or enableDomain.
+```bash
+npm install namestone-sdk
+```
+
+## Quick Start
 
 ```typescript
 import NameStone from "namestone-sdk";
 
-const ns = new NameStone(<YOUR_API_KEY_HERE>);
-```
+// Initialize the client (API key optional for some methods)
+const ns = new NameStone("YOUR_API_KEY");
 
-Then call with the relevant methods. Wrap all params in an object
-
-```typescript
-async function getData() {
-  const domain = "testbrand.eth";
-  const data = await ns.getNames({ domain: domain });
+// Example usage
+async function getSubdomains() {
+  const data = await ns.getNames({
+    domain: "example.eth",
+  });
   console.log(data);
 }
-
-getData();
 ```
 
-## Documentation
+## API Reference
 
-### `setName`
+### Authentication Methods
 
-Sets a name with associated data. Maps to the NameStone '/set-name' route.
+#### `getSiweMessage`
 
-- `name`: The name to set.
-- `domain`: The domain for the name.
-- `address`: The address associated with the name.
-- `contenthash`: Optional content hash.
-- `text_records`: Optional text records.
-- `coin_types`: Optional coin types.
+Generate a Sign-In with Ethereum (SIWE) message for authentication. Does not require an API key. Maps to the NameStone '/get-siwe-message' route.
 
-**Returns**: A promise that resolves when the name is set.
+```typescript
+const message = await ns.getSiweMessage({
+  address: string,      // Your Ethereum address (must own the domain)
+  domain?: string,      // Optional: Domain sending SIWE message (default: namestone.xyz)
+  uri?: string         // Optional: URI sending SIWE message
+});
+```
 
-**Throws**:
+#### `enableDomain`
 
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
+Enable new domains for NameStone usage. Requires a signed SIWE message. Does not require an API key. Maps to the NameStone '/enable-domain' route.
 
-<br>
+```typescript
+const result = await ns.enableDomain({
+  company_name: string,  // Your company name
+  email: string,         // Email for API key delivery
+  address: string,       // Domain owner's Ethereum address
+  domain: string,        // Domain to enable (e.g., "brand.eth")
+  signature: string,     // Signed SIWE message
+  api_key?: string,      // Optional: Existing API key
+  cycle_key?: "1"       // Optional: Set to "1" to cycle existing key
+});
+```
 
-### `getNames`
+### Domain Management
 
-Retrieves names based on specified criteria. Maps to the NameStone '/get-names' route.
+#### `setDomain`
 
-- `domain`: Optional domain to filter names.
-- `address`: Optional address to filter names.
-- `text_records`: Optional flag to include text records.
-- `limit`: Optional limit for the number of results.
-- `offset`: Optional offset for pagination.
+Sets a domain with associated data. Maps to the NameStone '/set-domain' route.
 
-**Returns**: A promise that resolves to an array of NameData.
+```typescript
+await ns.setDomain({
+  domain: string,           // Domain to configure
+  address: string,          // Associated address
+  contenthash?: string,     // Optional: Content hash
+  text_records?: Record<string, string>  // Optional: Text records
+});
+```
 
-**Throws**:
-
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
-
-<br>
-
-### `searchNames`
-
-Searches for names based on specified criteria. Maps to the NameStone '/search-names' route.
-
-- `domain`: The domain to search in.
-- `name`: The name to search for.
-- `text_records`: Optional flag to include text records.
-- `limit`: Optional limit for the number of results.
-- `exact_match`: Optional flag for exact matching.
-- `offset`: Optional offset for pagination.
-
-**Returns**: A promise that resolves to an array of NameData.
-
-**Throws**:
-
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
-
-<br>
-
-### `deleteName`
-
-Deletes a name from the specified domain. Maps to the NameStone '/delete-name' route.
-
-- `name`: The name to delete.
-- `domain`: The domain from which to delete the name.
-
-**Returns**: A promise that resolves when the name is deleted.
-
-**Throws**:
-
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
-
-<br>
-
-### `setDomain`
-
-Sets domain data. Maps to the NameStone '/set-domain' route.
-
-- `domain`: The domain to set.
-- `address`: The address associated with the domain.
-- `contenthash`: Optional content hash.
-- `text_records`: Optional text records.
-
-**Returns**: A promise that resolves when the domain is set.
-
-**Throws**:
-
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
-
-<br>
-
-### `getDomain`
+#### `getDomain`
 
 Retrieves domain data. Maps to the NameStone '/get-domain' route.
 
-- `domain`: Optional domain to retrieve data for.
+```typescript
+const domain = await ns.getDomain({
+  domain: string, // Domain to query
+});
+```
 
-**Returns**: A promise that resolves to an array of DomainData.
+### Subdomain Management
 
-**Throws**:
+#### `setName`
 
-- `AuthenticationError`: If authentication fails.
-- `NetworkError`: If there's a network error.
+Sets a name with associated data. Maps to the NameStone '/set-name' route.
 
-<br>
+```typescript
+await ns.setName({
+  name: string,             // Subdomain name
+  domain: string,           // Parent domain
+  address: string,          // Associated address
+  contenthash?: string,     // Optional: Content hash
+  text_records?: Record<string, string>,  // Optional: Text records
+  coin_types?: Record<string, string>     // Optional: Coin types
+});
+```
 
-### `getSiweMessage`
+#### `getNames`
 
-Retrieves a SIWE (Sign-In with Ethereum) message for authentication. Maps to the NameStone '/get-siwe-message' route. Does not require an API key.
+Retrieves names based on specified criteria. Maps to the NameStone '/get-names' route.
 
-- `address`: Your Ethereum address. This address should own the domain you plan to use with NameStone.
-- `domain`: Optional domain sending the SIWE message. Defaults to namestone.xyz.
-- `uri`: Optional URI sending the SIWE message. Defaults to "https://namestone.xyz/api/public_v1/get-siwe-message"
-  **Returns**: A promise that resolves to a SIWE message string.
-  **Throws**:
-- `NetworkError`: If there's a network error.
-  <br>
+```typescript
+const names = await ns.getNames({
+  domain?: string,          // Optional: Filter by domain
+  address?: string,         // Optional: Filter by address
+  text_records?: boolean,   // Optional: Include text records
+  limit?: number,           // Optional: Results limit
+  offset?: number          // Optional: Pagination offset
+});
+```
 
-### `enableDomain`
+#### `searchNames`
 
-Programmatically enables new domains for NameStone. Maps to the NameStone '/enable-domain' route. Requires a signed SIWE message. Does not require an API key.
+Searches for names based on specified criteria. Maps to the NameStone '/search-names' route.
 
-- `company_name`: The name of your company.
-- `email`: Your email to send the api key to.
-- `address`: The Ethereum address that owns the domain.
-- `domain`: The domain (e.g. "testbrand.eth").
-- `signature`: The message from get-siwe-message, signed with your Ethereum address.
-- `api_key`: Optional. To use an existing NameStone API key that your wallet has access to.
-- `cycle_key`: Optional. If "1" and the api key already exists, the key will be cycled.
-  **Returns**: A promise that resolves to an object containing the new API key.
-  **Throws**:
-- NetworkError: If there's a network error.
-  <br>
+```typescript
+const results = await ns.searchNames({
+  domain: string,           // Domain to search within
+  name: string,             // Search query
+  text_records?: boolean,   // Optional: Include text records
+  limit?: number,           // Optional: Results limit
+  exact_match?: boolean,    // Optional: Require exact matches
+  offset?: number          // Optional: Pagination offset
+});
+```
 
-## Worklog
+#### `deleteName`
 
-- [ ] Improved error handling
+Deletes a name from the specified domain. Maps to the NameStone '/delete-name' route.
+
+```typescript
+await ns.deleteName({
+  name: string, // Subdomain to delete
+  domain: string, // Parent domain
+});
+```
+
+## Error Handling
+
+All methods may throw:
+
+- `AuthenticationError`: When API key is invalid or missing
+- `NetworkError`: When API requests fails
+
+## Todo
+
+- [ ] Improve error handling
