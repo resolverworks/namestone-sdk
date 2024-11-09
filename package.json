@@ -1,9 +1,16 @@
 {
   "name": "namestone-sdk",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "A type-safe wrapper for the NameStone.xyz API",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "repository": {
