@@ -7,4 +7,9 @@ export default defineConfig({
   shims: true,
   skipNodeModulesBundle: true,
   clean: true,
+  outExtension({ format }) {
+    return {
+      js: format === "cjs" ? ".cjs" : ".js",
+    };
+  },
 });
