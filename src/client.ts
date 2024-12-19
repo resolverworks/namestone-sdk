@@ -110,6 +110,7 @@ class NameStone {
 
     return res.json();
   }
+
   private async requestText(endpoint: string): Promise<string> {
     const url = `${this.baseUrl}${endpoint}`;
     const config: RequestInit = {
@@ -123,7 +124,7 @@ class NameStone {
 
     if (!res.ok) {
       const errorMessage = await res.text();
-      throw new NetworkError(`HTTP error! status: ${res.status}, message: ${errorMessage}`);
+      throw new NetworkError(errorMessage);
     }
 
     return res.text();
